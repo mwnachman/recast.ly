@@ -1,26 +1,22 @@
+'use strict';
+
 class App extends React.Component {
   constructor (props) {
     super(props);
 
-    this.state = {
+    this.state = { 
       playerVideo: window.exampleVideoData[0],
       videoList: [],
-      firstSearch: true,
-      searchYouTube: _.debounce(props.searchYouTube, 500)
     };
   }
 
   componentDidMount () {
-    this.filterVideos('');
+    this.filterVideos('', false); // no debouncing on launch
   }
 
-  filterVideos (filterText) {
-    if (this.state.firstSearch) {
-      this.props.searchYouTube({ query: filterText }, this.populateVideos.bind(this));
-      this.setState({ firstSearch : false });
-    } else {
-      this.state.searchYouTube({ query: filterText }, this.populateVideos.bind(this));
-    }
+  filterVideos (filterText, debounce) {
+    debounce = debounce || true; // debounce by default
+    this.props.searchYouTube({ query: filterText, debounce: debounce }, this.populateVideos.bind(this));
   }
 
   populateVideos (videos) {
@@ -51,4 +47,5 @@ class App extends React.Component {
 
 // In the ES6 spec, files are "modules" and do not share a top-level scope
 // `var` declarations will only exist globally where explicitly defined
-window.App = App;
+//window.App = App;
+export default App;

@@ -1,6 +1,6 @@
 // var googleURL = 'https://www.googleapis.com/youtube/v3/search';
 
-var searchYouTube = (options, callback) => {
+var ajaxGet = (options, callback) => {
 
   let data = {
     part: 'snippet',
@@ -26,4 +26,18 @@ var searchYouTube = (options, callback) => {
 
 };
 
+var debouncedAjaxGet = _.debounce(ajaxGet, 500);
+
+var searchYouTube = (options, callback) => {
+
+  // debounce ajax call
+  if (options.debounce) {
+    debouncedAjaxGet(options, callback);
+  } else {
+    ajaxGet(options, callback);
+  }
+
+};
+
 window.searchYouTube = searchYouTube;
+ 
